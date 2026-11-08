@@ -1,86 +1,122 @@
-# claude-agent-evaluation-skill
+# Agent Evaluation Skill
 
-A Claude Code skill for testing, benchmarking, and improving the reliability of LLM-powered agents.
+A Claude Code skill for testing, benchmarking, and improving the reliability of LLM-powered agents. It focuses on behavioral evaluation, capability assessment, repeatability, tool-use quality, safety boundaries, regression testing, and production monitoring.
 
-## Overview
+The central principle is that agent quality must be measured across representative tasks and repeated runs. A single successful response or one benchmark score is not enough to establish reliability.
 
-Agent evaluation differs from conventional unit testing because the same input can produce different outputs and many tasks have more than one acceptable solution. This skill helps define behavioral expectations, create representative test cases, measure performance across repeated runs, and identify failure patterns before deployment.
+## What This Skill Covers
 
-## Main Capabilities
-
-- Define behavioral contracts for agents.
-- Design task-based evaluation datasets.
-- Measure task completion and reliability.
-- Evaluate tool selection and tool execution.
-- Assess response quality and constraint adherence.
-- Create regression tests for known failures.
-- Build adversarial and edge-case test scenarios.
+- Define behavioral contracts and task success criteria.
+- Build representative evaluation datasets and test scenarios.
+- Measure task completion, correctness, and constraint adherence.
+- Evaluate tool selection, execution, and side effects.
+- Test safety, permissions, and resistance to adversarial inputs.
+- Measure consistency across repeated runs.
+- Track latency, token usage, tool calls, and other operational costs.
+- Build regression suites from observed failures.
 - Compare agent versions and configurations.
-- Monitor performance after deployment.
+- Monitor real-world performance after deployment.
 
-## Evaluation Dimensions
+## When to Use It
 
-| Dimension | What to measure |
-|---|---|
-| Task success | Whether the intended outcome was achieved |
-| Correctness | Whether the result is factually or technically sound |
-| Tool use | Whether the right tools were selected and used correctly |
-| Safety | Whether boundaries and permissions were respected |
-| Consistency | How much results vary across repeated runs |
-| Efficiency | Time, tool calls, and resource consumption |
-| Recovery | How well the agent handles errors and interruptions |
+Use this skill when evaluating a new agent, comparing model or prompt versions, investigating inconsistent behavior, assessing tool-use reliability, creating benchmark tasks, or preparing a production monitoring plan.
+
+It is useful for both pre-release evaluation and ongoing regression testing. It does not replace domain expert review, security testing, or a carefully designed production rollout.
 
 ## Installation
 
-```bash
+Clone the skill into the Claude Code skills directory:
+
+~~~bash
 git clone https://github.com/Brajesh31/claude-agent-evaluation-skill.git ~/.claude/skills/agent-evaluation
-```
+~~~
 
-## Usage
+Invoke it in Claude Code:
 
-Invoke the skill when creating an evaluation plan or investigating agent reliability:
-
-```text
+~~~text
 /agent-evaluation
-```
+~~~
 
-Provide the agent's intended behavior, available tools, representative tasks, acceptable outcomes, and known failure cases.
+Provide the agent's intended behavior, available tools, representative tasks, acceptable outcomes, constraints, and known failure cases.
 
-## Recommended Evaluation Workflow
+## Evaluation Workflow
 
-1. Define the agent's scope and success criteria.
-2. Create a representative set of realistic tasks.
-3. Specify acceptable and unacceptable behavior.
-4. Include edge cases and adversarial inputs.
-5. Run repeated trials with controlled configurations.
-6. Measure task outcomes and operational costs.
-7. Review failures and classify their causes.
-8. Convert important failures into regression cases.
-9. Compare versions using the same evaluation conditions.
-10. Monitor real-world behavior after deployment.
+1. **Define the decision.** State what release, configuration, or remediation decision the evaluation must support.
+2. **Write a behavioral contract.** Describe required behavior, forbidden behavior, and acceptable alternatives.
+3. **Build a representative task set.** Include common tasks, difficult cases, ambiguity, missing information, and out-of-scope requests.
+4. **Set scoring criteria.** Define observable pass conditions and partial-credit rules before running the agent.
+5. **Control the test conditions.** Record agent version, model, prompt, tools, temperature or sampling settings, data, and environment.
+6. **Run repeated trials.** Capture variability instead of relying on a single response.
+7. **Evaluate the complete trace.** Inspect decisions, tool calls, tool results, final output, and side effects.
+8. **Classify failures.** Separate reasoning, retrieval, planning, tool, instruction-following, safety, and infrastructure failures.
+9. **Compare fairly.** Use the same tasks and conditions when comparing agent versions.
+10. **Create regression cases.** Preserve important failures and rerun them after changes.
+11. **Review deployment readiness.** Consider quality, risk, latency, cost, and monitoring coverage.
+12. **Monitor after release.** Track user outcomes and production failures that the offline evaluation missed.
 
-## Metrics and Reporting
+## Evaluation Dimensions
 
-Report distributions and failure rates rather than relying on one successful run. Include sample size, test conditions, model and tool configuration, and confidence limitations.
+| Dimension | What to inspect |
+|---|---|
+| Task success | Whether the intended outcome was achieved |
+| Correctness | Factual, technical, or domain correctness |
+| Instruction adherence | Whether required constraints and output formats were followed |
+| Tool use | Tool choice, arguments, sequencing, and interpretation of results |
+| Safety | Permission boundaries, policy constraints, and side effects |
+| Consistency | Variation across repeated runs |
+| Robustness | Behavior under ambiguity, malformed input, and adversarial cases |
+| Recovery | Handling of tool errors, interruptions, and partial failure |
+| Efficiency | Latency, token use, tool calls, and compute consumption |
 
-Avoid optimizing only for a single benchmark score. A system can improve on a test set while becoming less useful in production if the evaluation does not represent real user tasks.
+## Scoring and Reporting
 
-## Repository Contents
+Define evaluation rubrics before looking at candidate results. Use observable criteria rather than subjective labels such as "good" or "smart". Report:
 
-- `SKILL.md`: Main agent evaluation instructions and methods.
-- `README.md`: Evaluation dimensions, workflow, and reporting guidance.
+- Number of tasks and repeated trials.
+- Pass rate and partial-credit distribution.
+- Failure categories and severity.
+- Variability across repeated runs.
+- Tool-call and side-effect errors.
+- Latency and resource cost.
+- Model, prompt, and tool configuration.
+- Important limitations and confidence constraints.
 
-## Evaluation Checklist
+Do not collapse safety-critical failures into an average score. Report them separately. Avoid overfitting an agent to a narrow benchmark at the expense of real user outcomes.
 
-- Test cases represent actual user tasks.
-- Expected behavior is documented.
-- Repeated runs capture variability.
-- Tool calls and side effects are evaluated.
-- Safety and permission boundaries are tested.
-- Failure cases are retained as regression tests.
-- Metrics include task quality and operational cost.
-- Benchmark limitations are stated clearly.
+## Included Resources
 
-## Practical Principle
+- [Evaluation plan template](resources/evaluation-plan-template.md): define scope, dataset, metrics, trial design, and release decision.
+- [Evaluation case template](resources/evaluation-case-template.md): create reproducible task cases with explicit acceptance criteria.
+- [Evaluation report template](resources/evaluation-report-template.md): summarize aggregate outcomes, failure analysis, costs, and limitations.
 
-A benchmark is useful only when it predicts behavior that matters. Prefer a smaller, realistic evaluation suite over a large collection of disconnected tests.
+## Repository Structure
+
+~~~text
+claude-agent-evaluation-skill/
+├── SKILL.md
+├── README.md
+├── LICENSE
+└── resources/
+    ├── evaluation-case-template.md
+    ├── evaluation-plan-template.md
+    └── evaluation-report-template.md
+~~~
+
+## Practical Guidelines
+
+- Prefer realistic tasks over large collections of disconnected synthetic prompts.
+- Test both intended triggers and nearby out-of-scope requests.
+- Evaluate tool traces and side effects, not only final text.
+- Repeat non-deterministic tests and report the number of runs.
+- Keep a holdout set for final comparisons.
+- Separate safety failures from ordinary quality errors.
+- Preserve failing examples as regression tests.
+- Report benchmark limitations honestly.
+
+## Source and License Notes
+
+The root LICENSE file contains the repository's declared MIT license for material covered by that license. The current SKILL.md also identifies upstream source material as "vibeship-spawner-skills (Apache 2.0)". The root MIT file does not, by itself, replace or remove license obligations that apply to upstream material. Preserve applicable upstream notices and terms when redistributing that material.
+
+## License
+
+See the root LICENSE file and the source note above for the applicable licensing context.
