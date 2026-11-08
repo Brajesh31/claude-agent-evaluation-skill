@@ -1,36 +1,86 @@
-# Agent Evaluation Skill
+# claude-agent-evaluation-skill
 
-A practical Claude skill for testing, benchmarking, and improving the reliability of LLM-powered agents. It focuses on evaluating agent behaviour rather than treating an agent like a deterministic function with one expected output.
+A Claude Code skill for testing, benchmarking, and improving the reliability of LLM-powered agents.
 
-## What This Skill Covers
+## Overview
 
-- Designing repeatable tests for agent capabilities and task completion.
-- Measuring reliability across multiple runs and interpreting result distributions.
-- Creating behavioural contracts and regression checks.
-- Building adversarial test cases that expose failure modes.
-- Recognising benchmark overfitting, flaky results, and data leakage.
+Agent evaluation differs from conventional unit testing because the same input can produce different outputs and many tasks have more than one acceptable solution. This skill helps define behavioral expectations, create representative test cases, measure performance across repeated runs, and identify failure patterns before deployment.
 
-## Repository Structure
+## Main Capabilities
 
-- `SKILL.md`: The complete skill definition, including capabilities, evaluation patterns, anti-patterns, and common failure modes.
-- `LICENSE`: MIT License for this repository.
+- Define behavioral contracts for agents.
+- Design task-based evaluation datasets.
+- Measure task completion and reliability.
+- Evaluate tool selection and tool execution.
+- Assess response quality and constraint adherence.
+- Create regression tests for known failures.
+- Build adversarial and edge-case test scenarios.
+- Compare agent versions and configurations.
+- Monitor performance after deployment.
 
-## When to Use It
+## Evaluation Dimensions
 
-Use this skill when building an evaluation plan for an AI agent, comparing agent versions, investigating inconsistent outputs, or deciding whether an agent is ready for production. It is especially useful when a simple pass/fail test cannot capture the quality of an agent's reasoning or actions.
+| Dimension | What to measure |
+|---|---|
+| Task success | Whether the intended outcome was achieved |
+| Correctness | Whether the result is factually or technically sound |
+| Tool use | Whether the right tools were selected and used correctly |
+| Safety | Whether boundaries and permissions were respected |
+| Consistency | How much results vary across repeated runs |
+| Efficiency | Time, tool calls, and resource consumption |
+| Recovery | How well the agent handles errors and interruptions |
 
-## Evaluation Principles
+## Installation
 
-A single successful run is weak evidence. Evaluate across varied inputs and repeated trials, measure more than one dimension of quality, and include realistic failure conditions. Keep benchmark performance connected to production outcomes so that optimising a score does not hide poor real-world behaviour.
+```bash
+git clone https://github.com/Brajesh31/claude-agent-evaluation-skill.git ~/.claude/skills/agent-evaluation
+```
 
-## Getting Started
+## Usage
 
-1. Add the skill to a Claude-compatible skills environment.
-2. Invoke it when planning agent tests, benchmarks, or reliability reviews.
-3. Define the behaviours and outcomes that matter for the target use case.
-4. Run repeated, representative tests and review the resulting patterns.
-5. Turn discovered failures into regression tests.
+Invoke the skill when creating an evaluation plan or investigating agent reliability:
 
-## License
+```text
+/agent-evaluation
+```
 
-Released under the MIT License. See [LICENSE](LICENSE) for details.
+Provide the agent's intended behavior, available tools, representative tasks, acceptable outcomes, and known failure cases.
+
+## Recommended Evaluation Workflow
+
+1. Define the agent's scope and success criteria.
+2. Create a representative set of realistic tasks.
+3. Specify acceptable and unacceptable behavior.
+4. Include edge cases and adversarial inputs.
+5. Run repeated trials with controlled configurations.
+6. Measure task outcomes and operational costs.
+7. Review failures and classify their causes.
+8. Convert important failures into regression cases.
+9. Compare versions using the same evaluation conditions.
+10. Monitor real-world behavior after deployment.
+
+## Metrics and Reporting
+
+Report distributions and failure rates rather than relying on one successful run. Include sample size, test conditions, model and tool configuration, and confidence limitations.
+
+Avoid optimizing only for a single benchmark score. A system can improve on a test set while becoming less useful in production if the evaluation does not represent real user tasks.
+
+## Repository Contents
+
+- `SKILL.md`: Main agent evaluation instructions and methods.
+- `README.md`: Evaluation dimensions, workflow, and reporting guidance.
+
+## Evaluation Checklist
+
+- Test cases represent actual user tasks.
+- Expected behavior is documented.
+- Repeated runs capture variability.
+- Tool calls and side effects are evaluated.
+- Safety and permission boundaries are tested.
+- Failure cases are retained as regression tests.
+- Metrics include task quality and operational cost.
+- Benchmark limitations are stated clearly.
+
+## Practical Principle
+
+A benchmark is useful only when it predicts behavior that matters. Prefer a smaller, realistic evaluation suite over a large collection of disconnected tests.
